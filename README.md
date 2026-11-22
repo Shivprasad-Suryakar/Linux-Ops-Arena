@@ -31,32 +31,32 @@ Master **420 curated Linux questions** across **7 core system administration dom
 
 ---
 
-## 🕹️ Controls & Keyboard Shortcuts
+## 📂 Repository Structure
 
-* **Select Answer:** Click an option or press `1`–`4` / `A`–`D` on your keyboard.
-* **Next Question:** Click **Next Challenge →** or press `Enter`.
-* **Mode & Settings:** Switch between **Arena Run**, **Question Bank**, **K8s Manifests**, toggle **Sound FX** (`🔊`/`🔇`), or **Reset** saved progress from the top navigation bar.
+```text
+Linux-Ops-Arena/
+├── index.html             # Self-contained Linux Ops Arena web app
+├── configmap-nginx.yaml   # Kubernetes ConfigMap mounting index.html
+├── deployment.yaml        # Kubernetes Deployment (2 replicas of nginx:1.27-alpine)
+├── service.yaml           # Kubernetes NodePort Service (port 80 -> nodePort 30080)
+└── README.md              # Project documentation
 
----
-
-## ☸️ Deploy on Kubernetes
-
-### Option 1: Using Repository Manifests (ConfigMap + Nginx)
-
-Deploy directly using the manifests in this repository (`configmap-nginx.yaml`, `deployment.yaml`, and `service.yaml`):
-
-```bash
-# 1. Create namespace
-kubectl create namespace devops-arena
-
-# 2. Load index.html into a ConfigMap (or apply configmap-nginx.yaml)
+# 1. Generate or update configmap-nginx.yaml from index.html
 kubectl create configmap linux-ops-arena-html \
   --from-file=index.html=index.html \
-  -n devops-arena
+  --dry-run=client -o yaml > configmap-nginx.yaml
 
-# 3. Apply Deployment and Service
-kubectl apply -f deployment.yaml -n devops-arena
-kubectl apply -f service.yaml -n devops-arena
+# 2. Apply the ConfigMap, Deployment, and NodePort Service
+kubectl apply -f configmap-nginx.yaml
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
 
-# 4.  Access the game at http://<NODE_IP>:30080 or port-forward locally:
-kubectl port-forward svc/linux-ops-arena-svc 8080:80 -n devops-arena
+# 3. Verify pods and NodePort service
+kubectl get pods -l app=linux-ops-arena
+kubectl get svc linux-ops-arena-svc
+
+# 4 . Access the game in your browser via your node's IP address on NodePort 30080: 
+http://<NODE_IP>:30080
+
+# 5. Or forward the service port locally:
+kubectl port-forward svc/linux-ops-arena-svc 8080:80
