@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linux-ops-arena
+  namespace: devops-arena
+  labels:
+    app: linux-ops-arena
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: linux-ops-arena
+  template:
+    metadata:
+      labels:
+        app: linux-ops-arena
+    spec:
+      containers:
+        - name: nginx-quiz
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          volumeMounts:
+            - name: game-html
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: game-html
+          configMap:
+            name: linux-ops-arena-html
