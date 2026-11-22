@@ -58,5 +58,5 @@ kubectl create configmap linux-ops-arena-html \
 kubectl apply -f deployment.yaml -n devops-arena
 kubectl apply -f service.yaml -n devops-arena
 
-Access the game at http://<NODE_IP>:30080 or port-forward locally:
+# 4.  Access the game at http://<NODE_IP>:30080 or port-forward locally:
 kubectl port-forward svc/linux-ops-arena-svc 8080:80 -n devops-arena
