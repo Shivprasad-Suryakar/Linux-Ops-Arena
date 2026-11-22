@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: linux-ops-arena
-  namespace: devops-arena
   labels:
     app: linux-ops-arena
 spec:
