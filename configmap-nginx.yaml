@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: linux-ops-arena-html
+  namespace: devops-arena
+data:
+  index.html: |
+    <!-- Save this HTML file as index.html and apply: -->
+    <!-- kubectl create ns devops-arena -->
+    <!-- kubectl create configmap linux-ops-arena-html --from-file=index.html=linux-ops-arena.html -n devops-arena -->
+    <!-- kubectl apply -f deployment.yaml -f service.yaml -->
