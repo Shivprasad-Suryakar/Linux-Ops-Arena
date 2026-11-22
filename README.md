@@ -54,6 +54,7 @@ kubectl create configmap linux-ops-arena-html --from-file=index.html=index.html 
 kubectl apply -f configmap-nginx.yaml
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
+kubectl rollout restart deployment/linux-ops-arena
 ```
 
 **3. Verify pods and NodePort service:**
