@@ -2,11 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: linux-ops-arena-svc
-  namespace: devops-arena
   labels:
     app: linux-ops-arena
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: linux-ops-arena
   ports:
@@ -14,3 +13,4 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 30080
