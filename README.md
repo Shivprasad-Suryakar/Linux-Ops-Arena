@@ -30,33 +30,47 @@ Master **420 curated Linux questions** across **7 core system administration dom
 | **KRN** | Package & Kernel/Boot | `uname`, `apt`, `dnf`, `sysctl`, `lsmod`, `modprobe`, `initramfs`, GRUB2 config, `dmesg -T`, `vm.swappiness`, `ldconfig` |
 
 ---
-
 ## 📂 Repository Structure
 
-```text
-Linux-Ops-Arena/
-├── index.html             # Self-contained Linux Ops Arena web app
-├── configmap-nginx.yaml   # Kubernetes ConfigMap mounting index.html
-├── deployment.yaml        # Kubernetes Deployment (2 replicas of nginx:1.27-alpine)
-├── service.yaml           # Kubernetes NodePort Service (port 80 -> nodePort 30080)
-└── README.md              # Project documentation
+* `index.html` — Self-contained Linux Ops Arena web app
+* `configmap-nginx.yaml` — Kubernetes ConfigMap mounting `index.html`
+* `deployment.yaml` — Kubernetes Deployment (2 replicas of `nginx:1.27-alpine`)
+* `service.yaml` — Kubernetes NodePort Service (port `80` → nodePort `30080`)
+* `README.md` — Project documentation
 
-# 1. Generate or update configmap-nginx.yaml from index.html
-kubectl create configmap linux-ops-arena-html \
-  --from-file=index.html=index.html \
-  --dry-run=client -o yaml > configmap-nginx.yaml
+---
 
-# 2. Apply the ConfigMap, Deployment, and NodePort Service
+## ☸️ Deploy on Kubernetes
+
+**1. Generate or update `configmap-nginx.yaml` from `index.html`:**
+
+```bash
+kubectl create configmap linux-ops-arena-html --from-file=index.html=index.html --dry-run=client -o yaml > configmap-nginx.yaml
+```
+
+**2. Apply the ConfigMap, Deployment, and NodePort Service:**
+
+```bash
 kubectl apply -f configmap-nginx.yaml
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
+```
 
-# 3. Verify pods and NodePort service
+**3. Verify pods and NodePort service:**
+
+```bash
 kubectl get pods -l app=linux-ops-arena
 kubectl get svc linux-ops-arena-svc
+```
 
-# 4 . Access the game in your browser via your node's IP address on NodePort 30080: 
+**4. Access the game in your browser via your node's IP on NodePort `30080`:**
+
+```text
 http://<NODE_IP>:30080
+```
 
-# 5. Or forward the service port locally:
+**5. Or forward the service port locally (`http://localhost:8080`):**
+
+```bash
 kubectl port-forward svc/linux-ops-arena-svc 8080:80
+```
